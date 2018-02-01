@@ -18,12 +18,12 @@ def main(mode='input', device_id=None):
     """
 
     if mode == 'input':
-        print 'input'
+        print('input')
         input_main(device_id)
     elif mode == 'output':
         output_main(device_id)
     elif mode == 'list':
-        print 'list'
+        print('list')
         print_device_info()
     else:
         raise ValueError("Unknown mode option '%s'" % mode)
@@ -43,15 +43,13 @@ def _print_device_info():
             in_out = "(input)"
         if output:
             in_out = "(output)"
-
-       print ("%2i: interface :%s:, name :%s:, opened :%s:  %s" %
-               (i, interf, name, opened, in_out))
+        print("{}i: interface :{}:, name :{}:, opened :{}:  {}".format(i, interf, name, opened, in_out))
 
 
 
 
 def input_main(device_id = None): #default is none
-    print 'inputtinnnngg'
+    print('inputtinnnngg')
     pygame.init()
     pygame.fastevent.init()
     event_get = pygame.fastevent.get
@@ -60,16 +58,15 @@ def input_main(device_id = None): #default is none
     pygame.midi.init()
 
     _print_device_info()
-
-
- if device_id is None:
+    
+    if device_id is None:
         input_id = pygame.midi.get_default_input_id()
     else:
         input_id =  device_id
-        print 'input_id = '
-    print ("using input_id :%s:" % input_id)
+        print('input_id = ')
+    print("using input_id :%s:" % input_id)
     i = pygame.midi.Input( input_id )
-    print i
+    print("{}".format(i))
 
 
     going = True
@@ -78,7 +75,7 @@ def input_main(device_id = None): #default is none
     if not events:
         pass
     else:
-        print events
+        print("{}".format(events))
 
         for e in events:
             if e.type in [QUIT]:
@@ -90,7 +87,7 @@ def input_main(device_id = None): #default is none
 
         if i.poll():
             midi_events = i.read(10)
-            print 'midi', midi_events
+            print('midi\n{}'.format(midi_events))
             # convert them into pygame events.
             midi_evs = pygame.midi.midis2events(midi_events, i.device_id)
 
@@ -101,5 +98,5 @@ def input_main(device_id = None): #default is none
     pygame.midi.quit()
 
 if __name__ == '__main__':
-    input_main(3) # properly selecting the input device HERE
+    input_main(int(sys.argv[1])) # properly selecting the input device HERE
 
