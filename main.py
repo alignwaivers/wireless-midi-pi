@@ -1,7 +1,7 @@
 import sys
 import pygame
 import pygame.midi
-from pygame.locals import *
+import pygame.locals
 
 
 def main(mode='input', device_id=None):
@@ -56,8 +56,6 @@ def input_main(device_id = None): #default is none
     event_post = pygame.fastevent.post
 
     pygame.midi.init()
-
-    _print_device_info()
     
     if device_id is None:
         input_id = pygame.midi.get_default_input_id()
@@ -71,20 +69,6 @@ def input_main(device_id = None): #default is none
 
     going = True
     while going:
-        events = event_get()
-    if not events:
-        pass
-    else:
-        print("{}".format(events))
-
-        for e in events:
-            if e.type in [QUIT]:
-                going = False
-            if e.type in [KEYDOWN]:
-                going = False
-            if e.type in [pygame.midi.MIDIIN]:
-                print (e)
-
         if i.poll():
             midi_events = i.read(10)
             print('midi\n{}'.format(midi_events))
@@ -98,5 +82,6 @@ def input_main(device_id = None): #default is none
     pygame.midi.quit()
 
 if __name__ == '__main__':
+    print_device_info()
     input_main(int(sys.argv[1])) # properly selecting the input device HERE
 
