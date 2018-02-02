@@ -1,0 +1,48 @@
+#N canvas 160 170 841 430 10;
+#X obj 15 110 udpreceive 9997;
+#X floatatom 185 183 3 0 0 0 - - -, f 3;
+#X floatatom 212 183 3 0 0 0 - - -, f 3;
+#X floatatom 239 183 3 0 0 0 - - -, f 3;
+#X floatatom 274 122 3 0 0 0 - - -, f 3;
+#X text 145 182 from;
+#X obj 26 175 unpackOSC;
+#X obj 26 202 pipelist;
+#X obj 185 159 unpack 0 0 0 0 0;
+#X floatatom 302 122 8 0 0 0 - - -, f 8;
+#X obj 120 136 route received from;
+#X floatatom 120 204 5 0 0 0 - - -, f 5;
+#X text 160 204 bytes;
+#X obj 354 24 import mrpeach;
+#X obj 151 289 print unrouted;
+#X msg 14 73 port 1234;
+#X obj 25 337 noteout;
+#X obj 26 242 routeOSC /filter;
+#X text 4 41 if you need to change port change this message and click
+it;
+#X text 351 42 often the pathways wont load corectly. if so select
+the browser from the window tab or press (CTRL B or CMD B). ... after
+you have opened the osc 'routeOSC example' then reopen this patch and
+it should work;
+#X obj 38 286 unpack;
+#X floatatom 79 307 5 0 0 0 - - -, f 5;
+#X floatatom 38 308 5 0 0 0 - - -, f 5;
+#X text 94 340 make sure midi out is loaded for Puredata and then send
+the midinotes wherever you like;
+#X connect 0 0 6 0;
+#X connect 0 1 10 0;
+#X connect 6 0 7 0;
+#X connect 6 1 7 1;
+#X connect 7 0 17 0;
+#X connect 8 0 1 0;
+#X connect 8 1 2 0;
+#X connect 8 2 3 0;
+#X connect 8 3 4 0;
+#X connect 8 4 9 0;
+#X connect 10 0 11 0;
+#X connect 10 1 8 0;
+#X connect 15 0 0 0;
+#X connect 17 0 16 0;
+#X connect 17 0 20 0;
+#X connect 17 1 14 0;
+#X connect 20 0 22 0;
+#X connect 20 1 21 0;
