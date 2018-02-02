@@ -72,11 +72,6 @@ def input_main(device_id = None): #default is none
         if i.poll():
             midi_events = i.read(10)
             print('midi\n{}'.format(midi_events))
-            # convert them into pygame events.
-            midi_evs = pygame.midi.midis2events(midi_events, i.device_id)
-
-            for m_e in midi_evs:
-                event_post( m_e )
 
     del i
     pygame.midi.quit()
