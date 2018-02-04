@@ -2,6 +2,7 @@
 Controller side script, using pygame.midi
 """
 import sys
+import argparse
 import pygame
 import pygame.midi
 from pythonosc import osc_message_builder
@@ -22,16 +23,16 @@ class Controller():
         self.osc_client = udp_client.SimpleUDPClient(osc_ip, osc_port)
         
     def run(self):
-        try:
-            while True:
-                if self.midi_in.poll():
-                    midi_events = self.midi_in.read(10)
-                    ############# SEND VIA OSC ###############
-                    print('{}'.format(midi_events[0][0][1:3]))
-                    self.osc_client.send_message("/filter", midi_events[0][0][1:3])
-                    ##########################################
-        except KeyboardInterrupt:
-            pygame.midi.quit()
+        while True:
+            if self.midi_in.poll():
+                midi_events = self.midi_in.read(10)
+                ############# SEND VIA OSC ###############
+                print('{}'.format(midi_events[0][0][1:3]))
+                self.osc_client.send_message("/filter", midi_events[0][0][1:3])
+                ##########################################
+
+    def end(self):
+        pygame.midi.quit()
       
 if __name__ == '__main__':
     #osc client setup
@@ -45,4 +46,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     c = Controller(args.ip, args.port, args.deviceid)
-    c.run()
+    print("MIDI device {} configured to send to {}:{}".
+              format(args.deviceid, args.ip, args.port))
+    try:
+        print("MIDI relay starting")
+        c.run()
+    except KeyboardInterrupt:
+        c.end()
