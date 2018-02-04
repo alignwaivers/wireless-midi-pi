@@ -3,10 +3,10 @@ Controller side script, using pygame.midi
 """
 import sys
 import argparse
-import pygame
-import pygame.midi
 from pythonosc import osc_message_builder
 from pythonosc import udp_client
+from rtmidi.midiutil import open_self.midi_input
+  
   
 class Controller():
     """
@@ -18,18 +18,40 @@ class Controller():
     device_id   -->     Device ID of MIDI control service attached to pi 
     """
     def __init__(self, osc_ip, osc_port, device_id):
-        pygame.midi.init()
+        try:
+            self.midi_in, self.port_name = open_self.midi_input(device_id)
+        except (EOFError, KeyboardInterrupt):
+            sys.exit()
         self.midi_in = pygame.midi.Input(device_id)
         self.osc_client = udp_client.SimpleUDPClient(osc_ip, osc_port)
         
     def run(self):
-        while True:
-            if self.midi_in.poll():
-                midi_events = self.midi_in.read(10)
-                ############# SEND VIA OSC ###############
-                print('{}'.format(midi_events[0][0][1:3]))
-                self.osc_client.send_message("/filter", midi_events[0][0][1:3])
-                ##########################################
+        try:
+            timer = time.time()
+            while True:
+                msg = self.midi_in.get_message()
+
+                if msg:
+                    message, deltatime = msg
+                    timer += deltatime
+                    print("[%s] @%0.6f %r" % (self.port_name, timer, message))
+
+                time.sleep(0.01)
+        except KeyboardInterrupt:
+        finally:
+            self.midi_in.close_port()
+            del self.midi_in
+    
+    
+    
+    
+        #while True:
+        #    if self.midi_in.poll():
+        #        midi_events = self.midi_in.read(10)
+        #        ############# SEND VIA OSC ###############
+        #        print('{}'.format(midi_events[0][0][1:3]))
+        #        self.osc_client.send_message("/filter", midi_events[0][0][1:3])
+        #        ##########################################
 
     def end(self):
         pygame.midi.quit()
