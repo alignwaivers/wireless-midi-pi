@@ -5,13 +5,13 @@ import rtmidi
 from pythonosc import dispatcher
 from pythonosc import osc_server
 
-def wifimidi_handler(unused_addr, args, volume):
+def wifimidi_handler(unused_addr, midiout, note, volume):
     message = None
     if volume == 0:
-        message = [0x80, args[0], volume]
+        message = [0x80, note, volume]
     else:
-        message = [0x90, args[0], volume]
-    args[1].send_message(message)
+        message = [0x90, note, volume]
+    midiout[0].send_message(message)
 
 if __name__ == "__main__":
     midiout = rtmidi.MidiOut()
