@@ -28,7 +28,7 @@ class Controller():
                 midi_events = self.midi_in.read(10)
                 ############# SEND VIA OSC ###############
                 print('{}'.format(midi_events[0][0][1:3]))
-                self.osc_client.send_message("/filter", midi_events[0][0][1:3])
+                self.osc_client.send_message("/wifimidi", midi_events[0][0][1:3])
                 ##########################################
 
     def end(self):
